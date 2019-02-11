@@ -12,7 +12,7 @@ then
 	Output:
 
 	<experimental bedgraph>.auc.threshold.merge.bed (Bed file of enriched regions)
-	Data structure: <chr>	<start>	<stop>	<AUC>	<max signal>	<max signal region>
+	Data structure: <chr>	<start>	<end>	<AUC>	<max signal>	<max signal region>
 
 	Example:
 
