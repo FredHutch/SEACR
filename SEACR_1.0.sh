@@ -5,9 +5,9 @@ set -ue
 if [ $# -lt 4 ]
 then
 	echo "
-	SEARCh: Sparse Enrichment Analysis for Regions in Chromatin
+	SEACR: Sparse Enrichment Analysis for CUT&RUN
 	
-	Usage: bash SEARCh_1.0.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["union" | "AUC"]
+	Usage: bash SEACR_1.0.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["union" | "AUC"]
 	
 	Output:
 
@@ -16,13 +16,13 @@ then
 
 	Example:
 
-	bash SEARCh_1.0.sh target.bedgraph IgG.bedgraph norm AUC
+	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph norm AUC
 	Calls enriched regions in target data using normalized IgG control track with AUC threshold
 	
-	bash SEARCh_1.0.sh target.bedgraph MPM099.bedgraph non union
+	bash SEACR_1.0.sh target.bedgraph MPM099.bedgraph non union
 	Calls enriched regions in target data using non-normalized IgG control track with AUC and max signal thresholds
 
-	bash SEARCh_1.0.sh target.bedgraph 0.01 non AUC
+	bash SEACR_1.0.sh target.bedgraph 0.01 non AUC
 	Calls enriched regions in target data by selecting the top 1% of regions by area under the curve (AUC)
 
 	"
