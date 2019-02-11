@@ -1,5 +1,5 @@
-# SEARCh
-SEARCh: Sparse Enrichment Analysis for Regions in Chromatin
+# SEACR
+SEACR: Sparse Enrichment Analysis for Regions in Chromatin
 
 Usage: 
 
