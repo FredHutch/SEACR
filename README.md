@@ -5,8 +5,10 @@ Usage: bash SEARCh_1.0.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <F
 	
 Output:
 
-<experimental bedgraph>.auc.threshold.merge.bed (Bed file of enriched regions)
-Data structure: <chr>	<start>	<stop>	<AUC>	<max signal>	<max signal region>
+	<experimental bedgraph>.auc.threshold.merge.bed (Bed file of enriched regions)
+Data structure: 
+	
+	<chr>	<start>	<stop>	<AUC>	<max signal>	<max signal region>
 
 Example:
 
