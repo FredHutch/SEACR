@@ -1,7 +1,7 @@
 # SEARCh
 SEARCh: Sparse Enrichment Analysis for Regions in Chromatin
 
-Usage: bash SEARCh_1.0.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["union" | "AUC"]
+Usage: bash SEARCh_1.0.sh experimental bedgraph [control bedgraph | FDR threshold] ["norm" | "non"] ["union" | "AUC"]
 	
 Output:
 
