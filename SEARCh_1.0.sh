@@ -13,9 +13,6 @@ then
 
 	<experimental bedgraph>.auc.threshold.merge.bed (Bed file of enriched regions)
 	Data structure: <chr>	<start>	<stop>	<AUC>	<max signal>	<max signal region>
-	
-	<experimental bedgraph>.auc.threshold.merge.summits.bed (Bed file of single base-pair summits)
-	Data structure: <chr>	<start>	<stop>	<Predicted fragment length>	<Predicted dispersion (sd/mean)>
 
 	Example:
 
