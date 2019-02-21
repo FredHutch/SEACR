@@ -73,7 +73,7 @@ elif [[ $height == "AUC" ]]
 	then
 	echo "Proceeding without peak height threshold"
 else
-	echo "Must specify \"union\" for peak height threshold or \"AUC\" for no peak height threshold in fourth input"
+	echo "Must specify \"union\" to include max signal threshold or \"AUC\" for no max signal threshold in fourth input"
 	exit 1
 fi
 
