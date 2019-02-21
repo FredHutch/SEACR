@@ -48,12 +48,12 @@ exp<-read.table(argsL$exp)
 expvec<-exp$V1
 expmax<-exp$V2
 numtest<-as.numeric(argsL$ctrl)
-if(is.na(numtest)){
+if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 #	print("Ctrl is a file")
 	ctrl<-read.table(argsL$ctrl)
 	ctrlvec<-ctrl$V1
 	ctrlmax<-ctrl$V2
-	if(argsL$norm=="yes"){
+	if(argsL$norm=="yes"){  ## Calculate peaks of density plots to generate normalization factor
 		y<-seq(0,max(ctrlvec),length.out=max(ctrlvec)-1)
 		ctrlvalue<-max(which(ecdf(ctrlvec)(y)<=0.9))
 		expvalue<-max(which(ecdf(expvec)(y)<=0.9))
@@ -63,7 +63,7 @@ if(is.na(numtest)){
 		constant<-(exptest$x[exptest$y==max(exptest$y)])/(ctrltest$x[ctrltest$y==max(ctrltest$y)])
 		ctrlvec<-ctrlvec*constant
 		ctrlmax<-ctrlmax*constant
-	}
+	} ## Calculate total signal and max signal thresholds
 	both<-c(expvec,ctrlvec)
 	both2<-c(expmax,ctrlmax)
 	pctremain<-function(x) (length(expvec)-(ecdf(expvec)(x)*length(expvec)))/(length(both)-(ecdf(both)(x)*length(both)))
@@ -76,7 +76,7 @@ if(is.na(numtest)){
 		z<-seq(0,floor(max(ctrlmax))-1,length.out=floor(max(ctrlmax))-1)
 	}
 	z0<-z[which(na.omit(pctremain2(z)) == max(na.omit(pctremain2(z))))]
-}else{
+}else{ ## If 2nd field is numeric, calculate percentile threshold
 #	print("Ctrl is numeric")
 	test<-ecdf(exp$V1)(exp$V1)
 	frame<-data.frame(values=exp$V1, percentile=1-test)
