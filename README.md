@@ -1,16 +1,18 @@
 # SEACR
 SEACR: Sparse Enrichment Analysis for CUT&RUN
 
+SEACR is intended to call peaks and enriched regions from sparse CUT&RUN or chromatin profiling data in which background is dominated by "zeroes" (i.e. regions with no read coverage). It requires bedgraphs as input, which can be generated from fragment BAM and BED files using Bedtools (https://bedtools.readthedocs.io/en/latest/). 
+
 Usage: 
 
 	bash SEACR_1.0.sh experimental bedgraph [control bedgraph | FDR threshold] ["norm" | "non"] ["union" | "AUC"]
 	
 Output:
 
-	<experimental bedgraph>.auc.threshold.merge.bed (Bed file of enriched regions)
+	<experimental bedgraph>.auc.threshold.merge.bed (BED file of enriched regions)
 Data structure: 
 	
-	<chr>	<start>	<end>	<AUC>	<max signal>	<max signal region>
+	<chr>	<start>	<end>	<total signal>	<max signal>	<max signal region>
 
 Example:
 
