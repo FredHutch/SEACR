@@ -97,14 +97,14 @@ echo "Calculating optimal AUC threshold: $(date)"
 if [[ -f $2 ]] && [[ $norm == "norm" ]]
 then
 	echo "Calculating threshold using normalized control: $(date)"
-	Rscript SEARCh_1.0.R --exp=$password.auc --ctrl=$password2.auc --norm=yes --output=$password
+	Rscript SEACR_1.0.R --exp=$password.auc --ctrl=$password2.auc --norm=yes --output=$password
 elif [[ -f $2 ]]
 then
 	echo "Calculating threshold using non-normalized control: $(date)"
-	Rscript SEARCh_1.0.R --exp=$password.auc --ctrl=$password2.auc --norm=no --output=$password
+	Rscript SEACR_1.0.R --exp=$password.auc --ctrl=$password2.auc --norm=no --output=$password
 else
 	echo "Using user-provided threshold: $(date)"
-	Rscript SEARCh_1.0.R --exp=$password.auc --ctrl=$2 --norm=no --output=$password
+	Rscript SEACR_1.0.R --exp=$password.auc --ctrl=$2 --norm=no --output=$password
 fi
 	
 #thresh=`cat $exp.threshold.txt`
