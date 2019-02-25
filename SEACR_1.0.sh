@@ -41,7 +41,7 @@ then
 	
 	Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
 	
-	Example:
+	Examples:
 
 	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph norm AUC
 	Calls enriched regions in target data using normalized IgG control track with AUC threshold
