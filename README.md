@@ -1,5 +1,5 @@
 # SEACR
-## SEACR: Sparse Enrichment Analysis for CUT&RUN
+## SEACR: *S*parse *E*nrichment *A*nalysis for *C*UT&*R*UN
 
 SEACR is intended to call peaks and enriched regions from sparse CUT&RUN or chromatin profiling data in which background is dominated by "zeroes" (i.e. regions with no read coverage). It requires R (https://www.r-project.org) and Bedtools (https://bedtools.readthedocs.io/en/latest/) to be available in your path, and it requires bedgraphs as input, which can be generated from fragment BAM or BED files using bedtools genomecov with the "-bg" flag. 
 
