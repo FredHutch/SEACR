@@ -10,20 +10,37 @@ then
 	Usage: bash SEACR_1.0.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["union" | "AUC"]
 	
 	Description of input fields:
-
-	Field 1: Target data bedgraph file in UCSC bedgraph format (https://genome.ucsc.edu/goldenpath/help/bedgraph.html) that omits regions containing 0 signal.
-
-	Field 2: Control (IgG) data bedgraph file to generate an empirical threshold for peak calling. Alternatively, a numeric threshold n between 0 and 1 returns the top n fraction of peaks based on total signal within peaks.
-
-	Field 3: “norm” denotes normalization of control to target data, “non” skips this behavior. "norm" is recommended unless experimental and control data are already rigorously normalized to each other (e.g. via spike-in).
-
-	Field 4: “union” forces implementation of a maximum signal threshold in addition to the total signal threshold, and corresponds to the “union” mode described in the text, whereas “AUC” avoids this behavior, and corresponds to “AUC only” mode.
 	
-	Output:
+	Field 1: Target data bedgraph file in UCSC bedgraph format (https://genome.ucsc.edu/goldenpath/help/bedgraph.html) that omits regions containing 0 signal.
+	
+	Field 2: Control (IgG) data bedgraph file to generate an empirical threshold for peak calling. Alternatively, a numeric threshold n between 0 and 1 returns the top n fraction of peaks based on total signal within peaks.
+	
+	Field 3: “norm” denotes normalization of control to target data, “non” skips this behavior. "norm" is recommended unless experimental and control data are already rigorously normalized to each other (e.g. via spike-in).
+		
+	Field 4: “union” forces implementation of a maximum signal threshold in addition to the total signal threshold, and corresponds to the “union” mode described in the text, whereas “AUC” avoids this behavior, and corresponds to “AUC only” mode.
+		
+	Output file:
 
 	<experimental bedgraph>.auc.threshold.merge.bed (Bed file of enriched regions)
-	Data structure: <chr>	<start>	<end>	<AUC>	<max signal>	<max signal region>
+	
+	Output data structure: 
+	
+	<chr>	<start>	<end>	<AUC>	<max signal>	<max signal region>
+	
+	Description of output fields:
 
+	Field 1: Chromosome
+	
+	Field 2: Start coordinate
+	
+	Field 3: End coordinate
+	
+	Field 4: Total signal contained within denoted coordinates
+	
+	Field 5: Maximum begraph signal attained at any base pair within denoted coordinates
+	
+	Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
+	
 	Example:
 
 	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph norm AUC
