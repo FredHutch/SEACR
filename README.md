@@ -1,7 +1,7 @@
 # SEACR
 ## SEACR: Sparse Enrichment Analysis for CUT&RUN
 
-SEACR is intended to call peaks and enriched regions from sparse CUT&RUN or chromatin profiling data in which background is dominated by "zeroes" (i.e. regions with no read coverage). It requires R (https://www.r-project.org) and Bedtools (https://bedtools.readthedocs.io/en/latest/) to be available in your path, and it requires bedgraphs as input, which can be generated from fragment BAM or BED files using Bedtools. 
+SEACR is intended to call peaks and enriched regions from sparse CUT&RUN or chromatin profiling data in which background is dominated by "zeroes" (i.e. regions with no read coverage). It requires R (https://www.r-project.org) and Bedtools (https://bedtools.readthedocs.io/en/latest/) to be available in your path, and it requires bedgraphs as input, which can be generated from fragment BAM or BED files using bedtools genomecov with the "-bg" flag. 
 
 ## Usage: 
 
@@ -38,7 +38,7 @@ Field 5: Maximum begraph signal attained at any base pair within denoted coordin
 
 Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
 
-## Example:
+## Examples:
 
 	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph norm AUC
 Calls enriched regions in target data using normalized IgG control track with AUC threshold
