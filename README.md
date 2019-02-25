@@ -1,13 +1,13 @@
 # SEACR
-SEACR: Sparse Enrichment Analysis for CUT&RUN
+##SEACR: Sparse Enrichment Analysis for CUT&RUN
 
 SEACR is intended to call peaks and enriched regions from sparse CUT&RUN or chromatin profiling data in which background is dominated by "zeroes" (i.e. regions with no read coverage). It requires R (https://www.r-project.org) and Bedtools (https://bedtools.readthedocs.io/en/latest/) to be available in your path, and it requires bedgraphs as input, which can be generated from fragment BAM or BED files using Bedtools. 
 
-Usage: 
+##Usage: 
 
 	bash SEACR_1.0.sh experimental bedgraph [control bedgraph | numeric threshold] ["norm" | "non"] ["union" | "AUC"]
 	
-Description of input fields:
+##Description of input fields:
 
 Field 1: Target data bedgraph file in UCSC bedgraph format (https://genome.ucsc.edu/goldenpath/help/bedgraph.html) that omits regions containing 0 signal.
 
@@ -17,14 +17,14 @@ Field 3: “norm” denotes normalization of control to target data, “non” s
 
 Field 4: “union” forces implementation of a maximum signal threshold in addition to the total signal threshold, and corresponds to the “union” mode described in the text, whereas “AUC” avoids this behavior, and corresponds to “AUC only” mode.
 
-Output file:
+##Output file:
 
 	<experimental bedgraph>.auc.threshold.merge.bed (BED file of enriched regions)
-Output data structure: 
+##Output data structure: 
 	
 	<chr>	<start>	<end>	<total signal>	<max signal>	<max signal region>
 
-Description of output fields:
+##Description of output fields:
 
 Field 1: Chromosome
 
@@ -38,7 +38,7 @@ Field 5: Maximum begraph signal attained at any base pair within denoted coordin
 
 Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
 
-Example:
+##Example:
 
 	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph norm AUC
 Calls enriched regions in target data using normalized IgG control track with AUC threshold
