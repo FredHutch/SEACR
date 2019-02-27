@@ -45,13 +45,13 @@ then
 	
 	Examples:
 
-	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph norm AUC
+	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph norm AUC output
 	Calls enriched regions in target data using normalized IgG control track with AUC threshold
 	
-	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph non union
+	bash SEACR_1.0.sh target.bedgraph IgG.bedgraph non union output
 	Calls enriched regions in target data using non-normalized IgG control track with AUC and max signal thresholds
 
-	bash SEACR_1.0.sh target.bedgraph 0.01 non AUC
+	bash SEACR_1.0.sh target.bedgraph 0.01 non AUC output
 	Calls enriched regions in target data by selecting the top 1% of regions by area under the curve (AUC)
 
 	"
