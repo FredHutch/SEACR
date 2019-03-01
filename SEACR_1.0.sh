@@ -23,7 +23,7 @@ then
 	
 	Output file:
 
-	<experimental bedgraph>.auc.threshold.merge.bed (Bed file of enriched regions)
+	<output prefix>.auc.threshold.merge.bed (Bed file of enriched regions)
 	
 	Output data structure: 
 	
