@@ -39,7 +39,7 @@ then
 	
 	Field 4: Total signal contained within denoted coordinates
 	
-	Field 5: Maximum begraph signal attained at any base pair within denoted coordinates
+	Field 5: Maximum bedgraph signal attained at any base pair within denoted coordinates
 	
 	Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
 	
