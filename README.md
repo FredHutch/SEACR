@@ -21,7 +21,7 @@ Field 5: Output prefix
 
 ## Output file:
 
-	<experimental bedgraph>.auc.threshold.merge.bed (BED file of enriched regions)
+	<output prefix>.auc.threshold.merge.bed (BED file of enriched regions)
 ## Output data structure: 
 	
 	<chr>	<start>	<end>	<total signal>	<max signal>	<max signal region>
