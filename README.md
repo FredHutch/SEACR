@@ -3,6 +3,12 @@
 
 SEACR is intended to call peaks and enriched regions from sparse CUT&RUN or chromatin profiling data in which background is dominated by "zeroes" (i.e. regions with no read coverage). It requires R (https://www.r-project.org) and Bedtools (https://bedtools.readthedocs.io/en/latest/) to be available in your path, and it requires bedgraphs as input, which can be generated from fragment BAM or BED files using bedtools genomecov with the "-bg" flag. 
 
+A description of the method can be found in the following manuscript:
+
+Meers MP, Bryson TD, Henikoff S. A streamlined protocol and analysis pipeline for CUT&RUN chromatin profiling. bioRxiv doi: https://doi.org/10.1101/569129
+
+Direct link: https://www.biorxiv.org/content/10.1101/569129v1
+
 ## Usage: 
 
 	bash SEACR_1.0.sh experimental bedgraph [control bedgraph | numeric threshold] ["norm" | "non"] ["union" | "AUC"] output prefix
