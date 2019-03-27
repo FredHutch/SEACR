@@ -114,7 +114,7 @@ then
 	cut -f 4,5 $password2.auc.bed > $password2.auc
 fi
 
-module load R
+# module load R  ## For use on cluster
 
 echo "Calculating optimal AUC threshold: $(date)"
 
@@ -164,7 +164,7 @@ fi
 
 echo "Merging nearby features and eliminating control-enriched features: $(date)"
 
-module load bedtools
+# module load bedtools ## For use on cluster
 mean=`awk '{s+=$3-$2; t++}END{print s/(t*10)}' $password.auc.threshold.bed`
 
 if [[ -f $2 ]]
