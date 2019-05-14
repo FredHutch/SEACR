@@ -188,6 +188,6 @@ then
 fi
 if [[ $norm == "norm" ]]
 then
-	rm $password.norm.txt
+	rm -f $password.norm.txt
 fi
 echo "Done: $(date)"
