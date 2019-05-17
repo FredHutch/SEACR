@@ -7,7 +7,7 @@ A description of the method can be found in the following manuscript:
 
 Meers MP, Bryson TD, Henikoff S. A streamlined protocol and analysis pipeline for CUT&RUN chromatin profiling. bioRxiv doi: https://doi.org/10.1101/569129
 
-Direct link: https://www.biorxiv.org/content/10.1101/569129v1
+Direct link: https://www.biorxiv.org/content/10.1101/569129v2
 
 ## Usage: 
 
