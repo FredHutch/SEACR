@@ -28,7 +28,7 @@ parseArgs <- function(x) strsplit(sub("^--", "", x), "=")
 argsDF <- as.data.frame(do.call("rbind", parseArgs(args)))
 argsL <- as.list(as.character(argsDF$V2))
 names(argsL) <- argsDF$V1
-gc(verbose=FALSE) 
+invis <- gc(verbose=FALSE) 
 
 ## Arg1 default
 #if(is.null(args[1])){
@@ -49,7 +49,7 @@ exp<-read.table(argsL$exp)
 expvec<-exp$V1
 expmax<-exp$V2
 suppressWarnings(numtest<-as.numeric(argsL$ctrl))
-gc(verbose=FALSE)
+invis <- gc(verbose=FALSE)
 if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 #	print("Ctrl is a file")
 	ctrl<-read.table(argsL$ctrl)
@@ -94,7 +94,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 		x0<-a0
 		z0<-b0
 	}
-	gc(verbose=FALSE)
+	invis <- gc(verbose=FALSE)
 	fdr<-c(1-pctremain(x0[1]), 1-pctremain(z0[1])) ## New for SEACR_1.1
 }else{ ## If 2nd field is numeric, calculate percentile threshold
 #	print("Ctrl is numeric")
@@ -107,10 +107,10 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	z0<-min(frame2$values[frame2$percentile <= ctrl[1]])
 	fdr<-ctrl[1] ## New for SEACR_1.1
 }
-gc(verbose=FALSE)
+invis <- gc(verbose=FALSE)
 write.table(c(x0[1],z0[1]), file=paste(argsL$output, ".threshold.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
 if(argsL$norm=="yes"){
 	write.table(constant, file=paste(argsL$output, ".norm.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE) #Added 7/19/18 to ensure norm value is multiplied by ctrl
 }
-gc(verbose=FALSE)
+invis <- gc(verbose=FALSE)
 write.table(fdr, file=paste(argsL$output, ".fdr.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE) #Added 5/15/19 to report empirical FDR for threshold detection
