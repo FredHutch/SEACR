@@ -55,9 +55,8 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	ctrl<-read.table(argsL$ctrl)
 	ctrlvec<-ctrl$V1
 	if(argsL$norm=="yes"){  ## Calculate peaks of density plots to generate normalization factor
-		y<-seq(0,max(ctrlvec),length.out=max(ctrlvec)-1)
-		ctrlvalue<-max(which(ecdf(ctrlvec)(y)<=0.9))
-		expvalue<-max(which(ecdf(expvec)(y)<=0.9))
+		ctrlvalue<-sort(ctrlvec)[as.integer(0.9*length(ctrlvec))] ## Added 7/15/19 to improve memory performance
+		expvalue<-sort(expvec)[as.integer(0.9*length(expvec))] ## Added 7/15/19 to improve memory performance
 		ctrltest<-density(ctrlvec[ctrlvec <= ctrlvalue]) ## New for SEACR_1.1
 		exptest<-density(expvec[expvec <= expvalue]) ## New for SEACR_1.1
 		constant<-(exptest$x[exptest$y==max(exptest$y)])/(ctrltest$x[ctrltest$y==max(ctrltest$y)])
