@@ -168,6 +168,13 @@ else
 	awk -v value=$mean 'BEGIN{s=1}; {if(s==1){chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6; s++}else{if(chr==$1 && $2 < stop+value){stop=$3; auc=auc+$4; if($5 > max){max=$5; coord=$6}else if($5==max){split(coord,t,"-"); split($6,u,"-"); coord=t[1]"-"}u[2]}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6}}}' $password.auc.threshold.bed > $5.auc.threshold.merge.bed
 fi
 
+if [[ $height == "relaxed" ]]
+then
+  cat $5.auc.threshold.merge.bed > $5.relaxed.bed
+else
+  cat $5.auc.threshold.merge.bed > $5.stringent.bed
+fi
+
 echo "Removing temporary files: $(date)"
 
 rm $password.auc.bed
@@ -175,6 +182,7 @@ rm $password.auc
 rm $password.threshold.txt
 rm $password.auc.threshold.bed
 rm $password.fdr.txt  ## Added 5/15/19 for SEACR_1.1
+rm $5.auc.threshold.merge.bed
 if [[ -f $2 ]]
 then
 	rm $password2.auc.bed
