@@ -9,6 +9,10 @@ Meers MP, Tenenbaum D, Henikoff S. (2019). Peak calling by Sparse Enrichment Ana
 
 Direct link: https://doi.org/10.1186/s13072-019-0287-4
 
+## SEACR web server
+
+A web interface for SEACR analysis can be found at https://seacr.fredhutch.org
+
 ## Recent changes
 
 ### v1.1
