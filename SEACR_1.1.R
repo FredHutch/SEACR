@@ -109,7 +109,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	frame<-data.frame(values=exp$V1, percentile=1-test)
 	test2<-ecdf(exp$V2)(exp$V2)
 	frame2<-data.frame(values=exp$V2, percentile=1-test2)
-	ctrl<-as.vector(argsL$ctrl)
+	ctrl<-as.vector(as.numeric(paste(0,argsL$ctrl,sep="")))
 	x0<-min(frame$values[frame$percentile <= ctrl[1]])
 	z0<-min(frame2$values[frame2$percentile <= ctrl[1]])
 	fdr<-ctrl[1] ## New for SEACR_1.1
