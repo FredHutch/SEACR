@@ -42,7 +42,7 @@ Bedgraph files should reflect density across *read pairs* rather than individual
 
 ## Output file:
 
-	<output prefix>.auc.threshold.merge.bed (BED file of enriched regions)
+	<output prefix>.stringent.bed OR <output prefix>.relaxed.bed (BED file of enriched regions)
 ## Output data structure: 
 	
 	<chr>	<start>	<end>	<total signal>	<max signal>	<max signal region>
