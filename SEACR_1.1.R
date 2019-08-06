@@ -68,7 +68,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	x0<-x[which(na.omit(pctremain(x[pctremain(x) < 1])) == max(na.omit(pctremain(x[pctremain(x) < 1]))))]  ## New for SEACR_1.1
 	z<-x[x <= x0[1]]	## New for SEACR_1.1
 	z2<-z[abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z))==min(abs(((pctremain(x0)+min(pctremain(z)))/2)-pctremain(z)))] ## New for SEACR_1.1
-	if(x0!=z2){  ## Added 7/15/19 to avoid omitting z when x0==z2
+	if(x0[1]!=z2[1]){  ## Added 7/15/19 to avoid omitting z when x0==z2
 		z<-z[z > z2[1]] ## New for SEACR_1.1
 		z0<-z[abs(z-(max(z)-((1/2)*(max(z)-min(z)))))==min(abs(z-(max(z)-((1/2)*(max(z)-min(z))))))] ## New for SEACR_1.1
 	}else{  ## Added 7/15/19 to avoid omitting z when x0==z2
@@ -82,16 +82,16 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	i<-2
 	output<-0
 	while(output==0){
-		test<-as.numeric(paste(c(0,".",rep(9,i)),sep="",collapse=""))
-		output<-as.numeric(quantile(frame$diff, test))
+		test2<-as.numeric(paste(c(0,".",rep(9,i)),sep="",collapse=""))
+		output<-as.numeric(quantile(frame$diff, test2))
 #		print(output)
 		i<-i+1
 	}
-	a<-frame$thresh[frame$diff != 0 & frame$diff < quantile(frame$diff, test)]
+	a<-frame$thresh[frame$diff != 0 & frame$diff < quantile(frame$diff, test2)]
 	a0<-a[which(na.omit(pctremain(a[pctremain(a) < 1])) == max(na.omit(pctremain(a[pctremain(a) <  1]))))]
 	b<-a[a <= a0[1]]
 	b2<-b[abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b))==min(abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b)))]
-	if(a0!=b2){  ## Added 7/15/19 to avoid omitting b when a0==b2
+	if(a0[1]!=b2[1]){  ## Added 7/15/19 to avoid omitting b when a0==b2
 		b<-b[b > b2[1]]
 		b0<-b[abs(b-(max(b)-((1/2)*(max(b)-min(b)))))==min(abs(b-(max(b)-((1/2)*(max(b)-min(b))))))]
 	}else{  ## Added 7/15/19 to avoid omitting b when a0==b2
