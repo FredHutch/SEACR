@@ -82,12 +82,12 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	i<-2
 	output<-0
 	while(output==0){
-		test2<-as.numeric(paste(c(0,".",rep(9,i)),sep="",collapse=""))
-		output<-as.numeric(quantile(frame$diff, test2))
+		test3<-as.numeric(paste(c(0,".",rep(9,i)),sep="",collapse=""))
+		output<-as.numeric(quantile(frame$diff, test3))
 #		print(output)
 		i<-i+1
 	}
-	a<-frame$thresh[frame$diff != 0 & frame$diff < quantile(frame$diff, test2)]
+	a<-frame$thresh[frame$diff != 0 & frame$diff < quantile(frame$diff, test3)]
 	a0<-a[which(na.omit(pctremain(a[pctremain(a) < 1])) == max(na.omit(pctremain(a[pctremain(a) <  1]))))]
 	b<-a[a <= a0[1]]
 	b2<-b[abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b))==min(abs(((pctremain(a0)+min(pctremain(b)))/2)-pctremain(b)))]
