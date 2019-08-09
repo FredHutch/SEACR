@@ -53,12 +53,12 @@ then
 	exit 1
 fi
 
-password=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13; echo ''`
-password2=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13; echo ''`
+password=`head /dev/urandom | LC_CTYPE=C tr -dc A-Za-z0-9 | head -c 13; echo ''`
+password2=`head /dev/urandom | LC_CTYPE=C tr -dc A-Za-z0-9 | head -c 13; echo ''`
 
 exp=`basename $1`
 
-if [[ $2 =~ ^[0-9]?+([.][0-9]+)?$ ]]
+if [[ $2 =~ ^[0-9]?+([.][0-9]+)?$ ]] || [[ $2 =~ ^[0-9]([.][0-9]+) ]] || [[ $2 =~ ^([.][0-9]+) ]]
 then
 	echo "Calling enriched regions without control file"
 elif [[ -f $2 ]]
