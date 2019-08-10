@@ -40,6 +40,12 @@ Field 5: Output prefix
 
 Bedgraph files should reflect density across *read pairs* rather than individual reads. If starting from BAM files, we recommend converting to paired end BED files using bedtools bamtobed with the -bedpe flag, then selecting the 5' and 3' coordinates of the read pair to generate a new BED3 file, and finally converting that file to a bedgraph using bedtools genomecov.
 
+Here is some example code for converting from a paired-end BAM to a fragment bedgraph file as described above:
+
+	bedtools bamtobed -bedpe -i $sample.bam > $sample.bed
+	cut -f 1,2,6 $sample.bed > $fragments.bed
+	bedtools genomecov -i $fragments.bed -g my.genome > $fragments.bedgraph
+
 ## Output file:
 
 	<output prefix>.stringent.bed OR <output prefix>.relaxed.bed (BED file of enriched regions)
