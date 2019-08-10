@@ -45,7 +45,7 @@ Here is some example code for converting from a paired-end BAM to a fragment bed
 	bedtools bamtobed -bedpe -i $sample.bam > $sample.bed
 	awk '$1==$4 && $6-$2 < 1000 {print $0}' $sample.bed > $sample.clean.bed
 	cut -f 1,2,6 $sample.clean.bed > $sample.fragments.bed
-	bedtools genomecov -i $sample.fragments.bed -g my.genome > $sample.fragments.bedgraph
+	bedtools genomecov -bg -i $sample.fragments.bed -g my.genome > $sample.fragments.bedgraph
 
 ## Output file:
 
