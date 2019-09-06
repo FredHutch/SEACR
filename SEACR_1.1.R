@@ -48,12 +48,15 @@ if(is.null(argsL$exp) | is.null(argsL$ctrl) | is.null(argsL$output) | is.null(ar
 exp<-read.table(argsL$exp)
 expvec<-exp$V1
 expmax<-exp$V2
+rm(exp)
 suppressWarnings(numtest<-as.numeric(argsL$ctrl))
 invis <- gc(verbose=FALSE)
 if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 #	print("Ctrl is a file")
 	ctrl<-read.table(argsL$ctrl)
 	ctrlvec<-ctrl$V1
+	rm(ctrl)
+	invis <- gc(verbose=FALSE)
 	if(argsL$norm=="yes"){  ## Calculate peaks of density plots to generate normalization factor
 		ctrlvalue<-sort(ctrlvec)[as.integer(0.9*length(ctrlvec))] ## Added 7/15/19 to improve memory performance
 		expvalue<-sort(expvec)[as.integer(0.9*length(expvec))] ## Added 7/15/19 to improve memory performance
@@ -105,10 +108,10 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	fdr<-c(1-pctremain(x0[1]), 1-pctremain(z0[1])) ## New for SEACR_1.1
 }else{ ## If 2nd field is numeric, calculate percentile threshold
 #	print("Ctrl is numeric")
-	test<-ecdf(exp$V1)(exp$V1)
-	frame<-data.frame(values=exp$V1, percentile=1-test)
-	test2<-ecdf(exp$V2)(exp$V2)
-	frame2<-data.frame(values=exp$V2, percentile=1-test2)
+	test<-ecdf(expvec)(expvec)
+	frame<-data.frame(values=expvec, percentile=1-test)
+	test2<-ecdf(expmax)(expmax)
+	frame2<-data.frame(values=expmax, percentile=1-test2)
 	ctrl<-as.vector(as.numeric(paste(0,argsL$ctrl,sep="")))
 	x0<-min(frame$values[frame$percentile <= ctrl[1]])
 	z0<-min(frame2$values[frame2$percentile <= ctrl[1]])
