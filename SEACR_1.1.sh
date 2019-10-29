@@ -98,15 +98,17 @@ fi
 
 echo "Creating experimental AUC file: $(date)"
 
-awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); s++}else{if(chr==$1 && $2==stop){stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2)}}}' $1 > $password.auc.bed
-cut -f 4,5 $password.auc.bed > $password.auc
+awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}else{if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3
+}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}' $1 > $password.auc.bed
+cut -f 4,7 $password.auc.bed > $password.auc
 
 if [[ -f $2 ]]
 then
-	echo "Creating control AUC file: $(date)"
+  echo "Creating control AUC file: $(date)"
 
-	awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); s++}else{if(chr==$1 && $2==stop){stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2)}}}' $2 > $password2.auc.bed
-	cut -f 4,5 $password2.auc.bed > $password2.auc
+  awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}else{if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"
+$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}' $2 > $password2.auc.bed
+  cut -f 4,7 $password2.auc.bed > $password2.auc
 fi
 
 # module load R  ## For use on cluster
@@ -133,16 +135,17 @@ fdr2=`cat $password.fdr.txt | sed -n '2p'`			## Added 5/15/19 for SEACR_1.1
 #thresh=`cat $exp.threshold.txt`
 thresh=`cat $password.threshold.txt | sed -n '1p'`
 thresh2=`cat $password.threshold.txt | sed -n '2p'`
+thresh3=`cat $password.threshold.txt | sed -n '3p'`
 
 echo "Creating thresholded feature file: $(date)"
 
-if [[ $height == "relaxed" ]] 
+if [[ $height == "relaxed" ]]
 then
-	echo "Empirical false discovery rate = $fdr2"
-	awk -v value=$thresh2 '$4 > value {print $0}' $password.auc.bed > $password.auc.threshold.bed 
+  echo "Empirical false discovery rate = $fdr2"
+  awk -v value=$thresh2 -v value2=$thresh3 '$4 > value && $7 > value2 {print $0}' $password.auc.bed | cut -f 1,2,3,4,5,6 > $password.auc.threshold.bed
 else
-	echo "Empirical false discovery rate = $fdr"
-	awk -v value=$thresh '$4 > value {print $0}' $password.auc.bed > $password.auc.threshold.bed 
+  echo "Empirical false discovery rate = $fdr"
+  awk -v value=$thresh -v value2=$thresh3 '$4 > value && $7 > value2 {print $0}' $password.auc.bed | cut -f 1,2,3,4,5,6 > $password.auc.threshold.bed
 fi
 
 if [[ -f $2 ]]
@@ -150,7 +153,7 @@ then
 	if [[ $norm == "norm" ]] #If normalizing, multiply control bedgraph by normalization constant
 	then
 		constant=`cat $password.norm.txt | sed -n '1p'`
-		awk -v mult=$constant 'BEGIN{OFS="\t"}; {$4=$4*mult; print $0}' $password2.auc.bed > $password2.auc2.bed
+		awk -v mult=$constant 'BEGIN{OFS="\t"}; {$4=$4*mult; print $0}' $password2.auc.bed | cut -f 1,2,3,4,5,6 > $password2.auc2.bed
 		mv $password2.auc2.bed $password2.auc.bed
 	fi
 	awk -v value=$thresh '$4 > value {print $0}' $password2.auc.bed > $password2.auc.threshold.bed
