@@ -55,6 +55,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 #	print("Ctrl is a file")
 	ctrl<-read.table(argsL$ctrl)
 	ctrlvec<-ctrl$V1
+	ctrlmax<-ctrl$V2
 	rm(ctrl)
 	invis <- gc(verbose=FALSE)
 	if(argsL$norm=="yes"){  ## Calculate peaks of density plots to generate normalization factor
@@ -104,6 +105,10 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 		x0<-a0
 		z0<-b0
 	}
+	both2<-c(expmax,ctrlmax)
+	d<-sort(unique(both2))
+	pctremain2<-function(x) 1-(ecdf(expmax)(x)-ecdf(ctrlmax)(x))
+	d0<-min(d[pctremain2(d) > 1])
 	invis <- gc(verbose=FALSE)
 	fdr<-c(1-pctremain(x0[1]), 1-pctremain(z0[1])) ## New for SEACR_1.1
 }else{ ## If 2nd field is numeric, calculate percentile threshold
@@ -118,7 +123,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	fdr<-ctrl[1] ## New for SEACR_1.1
 }
 invis <- gc(verbose=FALSE)
-write.table(c(x0[1],z0[1]), file=paste(argsL$output, ".threshold.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
+write.table(c(x0[1],z0[1],d0[1]), file=paste(argsL$output, ".threshold.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
 if(argsL$norm=="yes"){
 	write.table(constant, file=paste(argsL$output, ".norm.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE) #Added 7/19/18 to ensure norm value is multiplied by ctrl
 }
