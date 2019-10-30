@@ -7,7 +7,7 @@ then
 	echo "
 	SEACR: Sparse Enrichment Analysis for CUT&RUN
 	
-	Usage: bash SEACR_1.1.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
+	Usage: bash SEACR_1.2.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
 	
 	Description of input fields:
 	
@@ -42,12 +42,12 @@ then
 	Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
 	
 	Examples:
-	bash SEACR_1.1.sh target.bedgraph IgG.bedgraph norm stringent output
+	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph norm stringent output
 	Calls enriched regions in target data using normalized IgG control track with stringent threshold
 	
-	bash SEACR_1.1.sh target.bedgraph IgG.bedgraph non relaxed output
+	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph non relaxed output
 	Calls enriched regions in target data using non-normalized IgG control track with relaxed threshold
-	bash SEACR_1.1.sh target.bedgraph 0.01 non stringent output
+	bash SEACR_1.2.sh target.bedgraph 0.01 non stringent output
 	Calls enriched regions in target data by selecting the top 1% of regions by area under the curve (AUC)
 	"
 	exit 1
