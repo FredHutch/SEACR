@@ -55,11 +55,29 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 #	print("Ctrl is a file")
 	ctrl<-read.table(argsL$ctrl)
 	ctrlvec<-ctrl$V1
+	ctrlmax<-ctrl$V2
 	rm(ctrl)
 	invis <- gc(verbose=FALSE)
 	if(argsL$norm=="yes"){  ## Calculate peaks of density plots to generate normalization factor
-		ctrlvalue<-sort(ctrlvec)[as.integer(0.9*length(ctrlvec))] ## Added 7/15/19 to improve memory performance
-		expvalue<-sort(expvec)[as.integer(0.9*length(expvec))] ## Added 7/15/19 to improve memory performance
+		dist2d<-function(a,b,c){v1<- b - c; v2<- a - b; m<-cbind(v1,v2); d<-det(m)/sqrt(sum(v1*v1))}
+		expframe<-data.frame(count=seq(1,0,length=length(expvec)), quant=sort(expvec,decreasing=TRUE)/max(expvec), value=sort(expvec,decreasing=TRUE))
+		expframe$diff<-abs(expframe$count-expframe$quant)
+		expframe<-expframe[expframe$diff > 0.9*max(expframe$diff),]
+		expframe$dist<-apply(expframe,1,function(x) dist2d(c(x[1],x[2]),0,1))
+		ctrlframe<-data.frame(count=seq(1,0,length=length(ctrlvec)), quant=sort(ctrlvec,decreasing=TRUE)/max(ctrlvec), value=sort(ctrlvec,decreasing=TRUE))
+		ctrlframe$diff<-abs(ctrlframe$count-ctrlframe$quant)
+		ctrlframe<-ctrlframe[ctrlframe$diff > 0.9*max(ctrlframe$diff),]
+		ctrlframe$dist<-apply(ctrlframe,1,function(x) dist2d(c(x[1],x[2]),0,1))
+		if(ctrlframe$value[ctrlframe$dist==max(ctrlframe$dist)][1] > sort(ctrlvec)[as.integer(0.9*length(ctrlvec))]){
+		  ctrlvalue<-ctrlframe$value[ctrlframe$dist==max(ctrlframe$dist)][1]
+		}else{
+		  ctrlvalue<-sort(ctrlvec)[as.integer(0.9*length(ctrlvec))] ## Added 7/15/19 to improve memory performance
+		}
+		if(expframe$value[expframe$dist==max(expframe$dist)][1] > sort(expvec)[as.integer(0.9*length(expvec))]){
+		  expvalue<-expframe$value[expframe$dist==max(expframe$dist)][1]
+		}else{
+		  expvalue<-sort(expvec)[as.integer(0.9*length(expvec))] ## Added 7/15/19 to improve memory performance
+		}
 		ctrltest<-density(ctrlvec[ctrlvec <= ctrlvalue]) ## New for SEACR_1.1
 		exptest<-density(expvec[expvec <= expvalue]) ## New for SEACR_1.1
 		constant<-(exptest$x[exptest$y==max(exptest$y)])/(ctrltest$x[ctrltest$y==max(ctrltest$y)])
@@ -104,6 +122,10 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 		x0<-a0
 		z0<-b0
 	}
+	both2<-c(expmax,ctrlmax)
+	d<-sort(unique(both2))
+	pctremain2<-function(x) 1-(ecdf(expmax)(x)-ecdf(ctrlmax)(x))
+	d0<-min(d[pctremain2(d) > 1])
 	invis <- gc(verbose=FALSE)
 	fdr<-c(1-pctremain(x0[1]), 1-pctremain(z0[1])) ## New for SEACR_1.1
 }else{ ## If 2nd field is numeric, calculate percentile threshold
@@ -118,7 +140,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	fdr<-ctrl[1] ## New for SEACR_1.1
 }
 invis <- gc(verbose=FALSE)
-write.table(c(x0[1],z0[1]), file=paste(argsL$output, ".threshold.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
+write.table(c(x0[1],z0[1],d0[1]), file=paste(argsL$output, ".threshold.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
 if(argsL$norm=="yes"){
 	write.table(constant, file=paste(argsL$output, ".norm.txt", sep=""), sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE) #Added 7/19/18 to ensure norm value is multiplied by ctrl
 }

@@ -7,7 +7,7 @@ then
 	echo "
 	SEACR: Sparse Enrichment Analysis for CUT&RUN
 	
-	Usage: bash SEACR_1.1.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
+	Usage: bash SEACR_1.2.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
 	
 	Description of input fields:
 	
@@ -42,12 +42,12 @@ then
 	Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
 	
 	Examples:
-	bash SEACR_1.1.sh target.bedgraph IgG.bedgraph norm stringent output
+	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph norm stringent output
 	Calls enriched regions in target data using normalized IgG control track with stringent threshold
 	
-	bash SEACR_1.1.sh target.bedgraph IgG.bedgraph non relaxed output
+	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph non relaxed output
 	Calls enriched regions in target data using non-normalized IgG control track with relaxed threshold
-	bash SEACR_1.1.sh target.bedgraph 0.01 non stringent output
+	bash SEACR_1.2.sh target.bedgraph 0.01 non stringent output
 	Calls enriched regions in target data by selecting the top 1% of regions by area under the curve (AUC)
 	"
 	exit 1
@@ -98,15 +98,17 @@ fi
 
 echo "Creating experimental AUC file: $(date)"
 
-awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); s++}else{if(chr==$1 && $2==stop){stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2)}}}' $1 > $password.auc.bed
-cut -f 4,5 $password.auc.bed > $password.auc
+awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}else{if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3
+}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}' $1 > $password.auc.bed
+cut -f 4,7 $password.auc.bed > $password.auc
 
 if [[ -f $2 ]]
 then
-	echo "Creating control AUC file: $(date)"
+  echo "Creating control AUC file: $(date)"
 
-	awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); s++}else{if(chr==$1 && $2==stop){stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2)}}}' $2 > $password2.auc.bed
-	cut -f 4,5 $password2.auc.bed > $password2.auc
+  awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}else{if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"
+$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}' $2 > $password2.auc.bed
+  cut -f 4,7 $password2.auc.bed > $password2.auc
 fi
 
 # module load R  ## For use on cluster
@@ -133,16 +135,17 @@ fdr2=`cat $password.fdr.txt | sed -n '2p'`			## Added 5/15/19 for SEACR_1.1
 #thresh=`cat $exp.threshold.txt`
 thresh=`cat $password.threshold.txt | sed -n '1p'`
 thresh2=`cat $password.threshold.txt | sed -n '2p'`
+thresh3=`cat $password.threshold.txt | sed -n '3p'`
 
 echo "Creating thresholded feature file: $(date)"
 
-if [[ $height == "relaxed" ]] 
+if [[ $height == "relaxed" ]]
 then
-	echo "Empirical false discovery rate = $fdr2"
-	awk -v value=$thresh2 '$4 > value {print $0}' $password.auc.bed > $password.auc.threshold.bed 
+  echo "Empirical false discovery rate = $fdr2"
+  awk -v value=$thresh2 -v value2=$thresh3 '$4 > value && $7 > value2 {print $0}' $password.auc.bed | cut -f 1,2,3,4,5,6 > $password.auc.threshold.bed
 else
-	echo "Empirical false discovery rate = $fdr"
-	awk -v value=$thresh '$4 > value {print $0}' $password.auc.bed > $password.auc.threshold.bed 
+  echo "Empirical false discovery rate = $fdr"
+  awk -v value=$thresh -v value2=$thresh3 '$4 > value && $7 > value2 {print $0}' $password.auc.bed | cut -f 1,2,3,4,5,6 > $password.auc.threshold.bed
 fi
 
 if [[ -f $2 ]]
@@ -150,7 +153,7 @@ then
 	if [[ $norm == "norm" ]] #If normalizing, multiply control bedgraph by normalization constant
 	then
 		constant=`cat $password.norm.txt | sed -n '1p'`
-		awk -v mult=$constant 'BEGIN{OFS="\t"}; {$4=$4*mult; print $0}' $password2.auc.bed > $password2.auc2.bed
+		awk -v mult=$constant 'BEGIN{OFS="\t"}; {$4=$4*mult; print $0}' $password2.auc.bed | cut -f 1,2,3,4,5,6 > $password2.auc2.bed
 		mv $password2.auc2.bed $password2.auc.bed
 	fi
 	awk -v value=$thresh '$4 > value {print $0}' $password2.auc.bed > $password2.auc.threshold.bed
@@ -163,9 +166,9 @@ mean=`awk '{s+=$3-$2; t++}END{print s/(t*10)}' $password.auc.threshold.bed`
 
 if [[ -f $2 ]]
 then
-	awk -v value=$mean 'BEGIN{s=1}; {if(s==1){chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6; s++}else{if(chr==$1 && $2 < stop+value){stop=$3; auc=auc+$4; if($5 > max){max=$5; coord=$6}else if($5==max){split(coord,t,"-"); split($6,u,"-"); coord=t[1]"-"}u[2]}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6}}}' $password.auc.threshold.bed | bedtools intersect -wa -v -a - -b $password2.auc.threshold.bed > $5.auc.threshold.merge.bed  
+	awk -v value=$mean 'BEGIN{s=1}; {if(s==1){chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6; s++}else{if(chr==$1 && $2 < stop+value){stop=$3; auc=auc+$4; if($5 > max){max=$5; coord=$6}else if($5==max){split(coord,t,"-"); split($6,u,"-"); coord=t[1]"-"u[2]}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6}}}' $password.auc.threshold.bed | bedtools intersect -wa -v -a - -b $password2.auc.threshold.bed > $5.auc.threshold.merge.bed  
 else
-	awk -v value=$mean 'BEGIN{s=1}; {if(s==1){chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6; s++}else{if(chr==$1 && $2 < stop+value){stop=$3; auc=auc+$4; if($5 > max){max=$5; coord=$6}else if($5==max){split(coord,t,"-"); split($6,u,"-"); coord=t[1]"-"}u[2]}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6}}}' $password.auc.threshold.bed > $5.auc.threshold.merge.bed
+	awk -v value=$mean 'BEGIN{s=1}; {if(s==1){chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6; s++}else{if(chr==$1 && $2 < stop+value){stop=$3; auc=auc+$4; if($5 > max){max=$5; coord=$6}else if($5==max){split(coord,t,"-"); split($6,u,"-"); coord=t[1]"-"u[2]}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord; chr=$1; start=$2; stop=$3; auc=$4; max=$5; coord=$6}}}' $password.auc.threshold.bed > $5.auc.threshold.merge.bed
 fi
 
 if [[ $height == "relaxed" ]]
