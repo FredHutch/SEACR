@@ -137,6 +137,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	ctrl<-as.vector(as.numeric(paste(0,argsL$ctrl,sep="")))
 	x0<-min(frame$values[frame$percentile <= ctrl[1]])
 	z0<-min(frame2$values[frame2$percentile <= ctrl[1]])
+	d0<-0
 	fdr<-ctrl[1] ## New for SEACR_1.1
 }
 invis <- gc(verbose=FALSE)
