@@ -125,7 +125,11 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	both2<-c(expmax,ctrlmax)
 	d<-sort(unique(both2))
 	pctremain2<-function(x) 1-(ecdf(expmax)(x)-ecdf(ctrlmax)(x))
-	d0<-min(d[pctremain2(d) > 1])
+	if(length(d[pctremain2(d) > 1]) > 0){
+		d0<-min(d[pctremain2(d) > 1])
+	}else{
+		d0<-1
+	}
 	invis <- gc(verbose=FALSE)
 	fdr<-c(1-pctremain(x0[1]), 1-pctremain(z0[1])) ## New for SEACR_1.1
 }else{ ## If 2nd field is numeric, calculate percentile threshold
