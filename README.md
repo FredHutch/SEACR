@@ -18,6 +18,7 @@ A web interface for SEACR analysis can be found at https://seacr.fredhutch.org
 ### v1.3
 
 - Fixed a bug in which the bedgraph line thresholding added in v1.2 was failing for some datasets.
+- Added a check to filter out any input bedgraph lines containing zero signal.
 
 ### v1.2
 
