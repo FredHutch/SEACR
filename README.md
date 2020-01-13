@@ -15,9 +15,14 @@ A web interface for SEACR analysis can be found at https://seacr.fredhutch.org
 
 ## Recent changes
 
+### v1.3
+
+- Fixed a bug in which the bedgraph line thresholding added in v1.2 was failing for some datasets.
+- Added a check to filter out any input bedgraph lines containing zero signal.
+
 ### v1.2
 
-- Fixed a bug in lines 166 and 168 in which misplaced brackets caused the misreporting of the max signal region terminal coordinate for merged signal blocks
+- Fixed a bug in lines 166 and 168 in which misplaced brackets caused the misreporting of the max signal region terminal coordinate for merged signal blocks.
 - Added a counter to keep track of the number of component bedgraph lines that compose each signal block, and a function to calculate the minimum threshold of lines per signal block at which there is a smaller percentage of target signal blocks remaining than control. This is meant to be used as a filter for signal blocks that pass the total signal threshold despite being composed of very few bedgraph lines, which are unlikely to be true peaks.
 - Changed how the dataframe for density plotting is truncated (previously a hard-coded 90% cutoff): a dataframe of list quantile (i.e. line #/max line#) vs. value quantile (i.e. value/max value) is derived, and the threshold is selected by finding the dataframe pair for which the orthogonal distance below the line defined by (0,0);(1,1) is maximized.
 
@@ -28,7 +33,7 @@ A web interface for SEACR analysis can be found at https://seacr.fredhutch.org
 
 ## Usage: 
 
-	bash SEACR_1.2.sh experimental bedgraph [control bedgraph | numeric threshold] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
+	bash SEACR_1.3.sh experimental bedgraph [control bedgraph | numeric threshold] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
 
 ## Description of input fields:
 
@@ -76,11 +81,11 @@ Field 6: Region representing the farthest upstream and farthest downstream bases
 
 ## Examples:
 
-	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph norm stringent output
+	bash SEACR_1.3.sh target.bedgraph IgG.bedgraph norm stringent output
 Calls enriched regions in target data using normalized IgG control track with stringent threshold
 	
-	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph non relaxed output
+	bash SEACR_1.3.sh target.bedgraph IgG.bedgraph non relaxed output
 Calls enriched regions in target data using non-normalized IgG control track with relaxed threshold
 
-	bash SEACR_1.2.sh target.bedgraph 0.01 non stringent output
+	bash SEACR_1.3.sh target.bedgraph 0.01 non stringent output
 Calls enriched regions in target data by selecting the top 1% of regions by AUC

@@ -7,7 +7,7 @@ then
 	echo "
 	SEACR: Sparse Enrichment Analysis for CUT&RUN
 	
-	Usage: bash SEACR_1.2.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
+	Usage: bash SEACR_1.3.sh <experimental bedgraph>.bg [<control bedgraph>.bg | <FDR threshold>] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
 	
 	Description of input fields:
 	
@@ -42,12 +42,12 @@ then
 	Field 6: Region representing the farthest upstream and farthest downstream bases within the denoted coordinates that are represented by the maximum bedgraph signal
 	
 	Examples:
-	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph norm stringent output
+	bash SEACR_1.3.sh target.bedgraph IgG.bedgraph norm stringent output
 	Calls enriched regions in target data using normalized IgG control track with stringent threshold
 	
-	bash SEACR_1.2.sh target.bedgraph IgG.bedgraph non relaxed output
+	bash SEACR_1.3.sh target.bedgraph IgG.bedgraph non relaxed output
 	Calls enriched regions in target data using non-normalized IgG control track with relaxed threshold
-	bash SEACR_1.2.sh target.bedgraph 0.01 non stringent output
+	bash SEACR_1.3.sh target.bedgraph 0.01 non stringent output
 	Calls enriched regions in target data by selecting the top 1% of regions by area under the curve (AUC)
 	"
 	exit 1
@@ -98,16 +98,16 @@ fi
 
 echo "Creating experimental AUC file: $(date)"
 
-awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}else{if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3
-}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}' $1 > $password.auc.bed
+awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){if($4 > 0){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}}else{if($4 > 0){if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"$3
+}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}}' $1 > $password.auc.bed
 cut -f 4,7 $password.auc.bed > $password.auc
 
 if [[ -f $2 ]]
 then
   echo "Creating control AUC file: $(date)"
 
-  awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}else{if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"
-$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}' $2 > $password2.auc.bed
+  awk 'BEGIN{s=1}; {if(s==1){s++}else if(s==2){if($4 > 0){chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1; s++}}else{if($4 > 0){if(chr==$1 && $2==stop){num++; stop=$3; auc=auc+($4*($3-$2)); if ($4 > max){max=$4; coord=$1":"$2"-"
+$3}else if($4 == max){split(coord,t,"-"); coord=t[1]"-"$3}}else{print chr"\t"start"\t"stop"\t"auc"\t"max"\t"coord"\t"num; chr=$1; start=$2; stop=$3; max=$4; coord=$1":"$2"-"$3; auc=$4*($3-$2); num=1}}}}' $2 > $password2.auc.bed
   cut -f 4,7 $password2.auc.bed > $password2.auc
 fi
 
@@ -119,14 +119,14 @@ path=`dirname $0`
 if [[ -f $2 ]] && [[ $norm == "norm" ]]
 then
 	echo "Calculating threshold using normalized control: $(date)"
-	Rscript $path/SEACR_1.2.R --exp=$password.auc --ctrl=$password2.auc --norm=yes --output=$password
+	Rscript $path/SEACR_1.3.R --exp=$password.auc --ctrl=$password2.auc --norm=yes --output=$password
 elif [[ -f $2 ]]
 then
 	echo "Calculating threshold using non-normalized control: $(date)"
-	Rscript $path/SEACR_1.2.R --exp=$password.auc --ctrl=$password2.auc --norm=no --output=$password
+	Rscript $path/SEACR_1.3.R --exp=$password.auc --ctrl=$password2.auc --norm=no --output=$password
 else
 	echo "Using user-provided threshold: $(date)"
-	Rscript $path/SEACR_1.2.R --exp=$password.auc --ctrl=$2 --norm=no --output=$password
+	Rscript $path/SEACR_1.3.R --exp=$password.auc --ctrl=$2 --norm=no --output=$password
 fi
 	
 fdr=`cat $password.fdr.txt | sed -n '1p'`			## Added 5/15/19 for SEACR_1.1
