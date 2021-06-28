@@ -100,7 +100,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 	
 	frame<-data.frame(thresh=x[1:(length(x)-1)], pct=pctremain(x[1:(length(x)-1)]), diff=abs(diff(pctremain(x))))
 	frame<-na.omit(frame)
-	if(max(frame$diff > 0){
+	if(max(frame$diff > 0)){
 		i<-2
 		output<-0
 		while(output==0){
