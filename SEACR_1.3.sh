@@ -162,7 +162,13 @@ fi
 echo "Merging nearby features and eliminating control-enriched features: $(date)"
 
 # module load bedtools ## For use on cluster
-mean=`awk '{s+=$3-$2; t++}END{print s/(t*10)}' $password.auc.threshold.bed`
+linecount=`wc -l $password.auc.threshold.bed | awk '{print $1}'`
+if [[ linecount -gt 0 ]]
+then
+	mean=`awk '{s+=$3-$2; t++}END{print s/(t*10)}' $password.auc.threshold.bed`
+else
+	mean=0
+fi
 
 if [[ -f $2 ]]
 then
