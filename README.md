@@ -15,6 +15,15 @@ A web interface for SEACR analysis can be found at https://seacr.fredhutch.org
 
 ## Recent changes
 
+### v1.4
+
+- Added dashed command line parameter support: inputs 1, 2, 3, 4, and 5 now correspond to -b, -c, -n, -m, and -o, respectively
+- Added a function to test a window of control scaling thresholds in order to render scaling more stable in "norm" mode
+- Added an optional input for a numeric peak extension factor (-e) during peak merging, where all peaks will be extended by e*(mean(peak length)) (default = 0.1)
+- Added an optional yes/no input to dictate whether peaks overlapping robust IgG peaks get filtered out or not (-r) (default = "yes")
+- Fixed a bug in which empty peak files failed due to a division by zero error before completion
+- Fixed a bug in which "NaN" is erroneously passed to quantile() in files with a low complexity of peaks
+
 ### v1.3
 
 - Fixed a bug in which the bedgraph line thresholding added in v1.2 was failing for some datasets.
@@ -81,11 +90,11 @@ Field 6: Region representing the farthest upstream and farthest downstream bases
 
 ## Examples:
 
-	bash SEACR_1.3.sh target.bedgraph IgG.bedgraph norm stringent output
-Calls enriched regions in target data using normalized IgG control track with stringent threshold
+	bash SEACR_1.4.sh -b target.bedgraph -c IgG.bedgraph -n norm -m stringent -o output
+Calls enriched regions in target data using normalized IgG control track with stringent threshold and default peak extension factor of 0.1
 	
-	bash SEACR_1.3.sh target.bedgraph IgG.bedgraph non relaxed output
-Calls enriched regions in target data using non-normalized IgG control track with relaxed threshold
+	bash SEACR_1.4.sh -b target.bedgraph -c IgG.bedgraph -n non -m relaxed -o output -e 0.5
+Calls enriched regions in target data using non-normalized IgG control track with relaxed threshold and peak extension factor of 0.5
 
-	bash SEACR_1.3.sh target.bedgraph 0.01 non stringent output
-Calls enriched regions in target data by selecting the top 1% of regions by AUC
+	bash SEACR_1.4.sh -b target.bedgraph -c 0.01 -n non -m stringent -o output
+Calls enriched regions in target data by selecting the top 1% of regions by total signal
