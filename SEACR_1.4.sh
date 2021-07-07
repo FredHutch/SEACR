@@ -19,7 +19,7 @@ display_help()
 
 		Optional input fields:
 
-		-e|--extentsion Peak extension constant for peak merging (Default=0.1)
+		-e|--extension Peak extension constant for peak merging (Default=0.1)
 		-r|--remove Remove peaks overlapping IgG peaks (yes|no, Default=yes)
 		-h|--help	Print help screen
 	
@@ -133,7 +133,7 @@ then
 
 		Optional input fields:
 
-		-e|--extentsion Peak extension constant for peak merging (Default=0.1)
+		-e|--extension Peak extension constant for peak merging (Default=0.1)
 		-r|--remove Remove peaks overlapping IgG peaks (yes|no, Default=yes)	
 		-h|--help	Print help screen
 
