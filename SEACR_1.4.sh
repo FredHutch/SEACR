@@ -167,8 +167,8 @@ else
 	exit 1
 fi
 
-password=`head /dev/urandom | LC_CTYPE=C tr -dc A-Za-z0-9 | head -c 13; echo ''`
-password2=`head /dev/urandom | LC_CTYPE=C tr -dc A-Za-z0-9 | head -c 13; echo ''`
+password=`head /dev/urandom | base64 | tr -d '/+' | head -c 13; echo ''`
+password2=`head /dev/urandom | base64 | tr -d '/+' | head -c 13; echo ''`
 
 exp=`basename $BEDGRAPH`
 
