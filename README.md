@@ -42,7 +42,7 @@ A web interface for SEACR analysis can be found at https://seacr.fredhutch.org
 
 ## Usage: 
 
-	bash SEACR_1.3.sh experimental bedgraph [control bedgraph | numeric threshold] ["norm" | "non"] ["relaxed" | "stringent"] output prefix
+	bash SEACR_1.4.sh -b experimental bedgraph -c [control bedgraph | numeric threshold] -n ["norm" | "non"] -m ["relaxed" | "stringent"] -o output prefix
 
 ## Description of input fields:
 
