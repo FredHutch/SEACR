@@ -180,7 +180,7 @@ then
 	echo "Calling enriched regions with control file"
 	ctrl=`basename $CONTROL`
 else
-	echo "$2 is not a number or a file"
+	echo "$CONTROL is not a number or a file"
 	exit 1
 fi
 
