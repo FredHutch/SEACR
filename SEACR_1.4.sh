@@ -111,7 +111,7 @@ case $key in
     ;;
 esac
 done
-set -- "${POSITIONAL[@]}" # restore positional parameters
+set -- "${POSITIONAL[@]-default}" # restore positional parameters
 
 if [[ -z ${EXTENSION+x} ]] 
 then
@@ -159,7 +159,7 @@ else
 	exit 1
 fi
 
-if [[ $EXTENSION =~ ^[0-9]?+([.][0-9]+)?$ ]] 
+if [[ $EXTENSION =~ ^[0-9] ]] 
 then
 	echo "Extending peaks by $EXTENSION for merging"
 else
@@ -238,7 +238,7 @@ then
 	Rscript $path/SEACR_1.4.R --exp=$password.auc --ctrl=$password2.auc --norm=no --output=$password
 else
 	echo "Using user-provided threshold: $(date)"
-	Rscript $path/SEACR_1.4.R --exp=$password.auc --ctrl=$2 --norm=no --output=$password
+	Rscript $path/SEACR_1.4.R --exp=$password.auc --ctrl=$CONTROL --norm=no --output=$password
 fi
 	
 fdr=`cat $password.fdr.txt | sed -n '1p'`			## Added 5/15/19 for SEACR_1.1
