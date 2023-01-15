@@ -80,7 +80,7 @@ if(is.na(numtest)){ ## If 2nd field is a bedgraph, calculate empirical threshold
 		}
 		ctrltest<-density(ctrlvec[ctrlvec <= ctrlvalue]) ## New for SEACR_1.1
 		exptest<-density(expvec[expvec <= expvalue]) ## New for SEACR_1.1
-		constant<-(exptest$x[exptest$y==max(exptest$y)])/(ctrltest$x[ctrltest$y==max(ctrltest$y)])
+		constant<-abs((exptest$x[exptest$y==max(exptest$y)])/(ctrltest$x[ctrltest$y==max(ctrltest$y)]))
 		
 		### ADDED 3/10/21 to cross-correlate a range of scaling factors around "constant" ###
 
